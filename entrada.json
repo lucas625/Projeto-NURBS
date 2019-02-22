@@ -1,0 +1,39 @@
+{
+    "cam": {
+        "C": [
+            
+        ],
+        "N": [
+            
+        ],
+        "V": [
+           
+        ],
+        "screen": {
+            "d": 0,
+            "hx": 0,
+            "hy": 0
+        }
+    },
+
+    "degrees":{
+        "Udegree": 0,
+        "Vdegree": 0,
+        "Ndegree": 0,
+        "Mdegree": 0
+    },
+    
+    "points": [
+        
+    ],
+
+    "knots": {
+        "U": [],
+        "V": []
+    },
+
+    "weights": [
+        
+    ]
+
+}

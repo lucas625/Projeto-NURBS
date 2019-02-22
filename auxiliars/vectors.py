@@ -77,3 +77,9 @@ def crossProduct(vector1, vector2):
     elif(len(vector1)==2):
         aux.append((vector1[0]*vector2[1]) - (vector1[1]*vector2[0])) 
     return aux
+
+def normalize(vector1):
+    aux = cloneV(vector1)
+    helper = 1 / (vLen(vector1))
+    aux = constantMult(aux, helper)
+    return aux

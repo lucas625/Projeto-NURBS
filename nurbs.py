@@ -40,6 +40,12 @@ class Nurbs:
 
     def bsplineBFunction(self, knots, u, i, p):
         #the B-spline basis function
+        """
+            knots: list of knots that has a interval that contais u
+            u: position
+            i: actual interval
+            p: degree
+        """
         if p==0:
             return self.checkSpan(knots[i], knots[i+1], u)
         N1 = self.bsplineBFunction(knots,u,i,p-1)
@@ -52,32 +58,30 @@ class Nurbs:
             aux2 = (N2*(knots[i+p+1] - u)) / (knots[i+p+1] - knots[i+1])
         return aux1 + aux2
 
-    def find_interval(self, knots, value):
-        for i in range(len(knots)):
-            if ( knots[i] <= value and value < knots[i+1] ):
-                return i
-        else:
-            raise("value is not inside any knot span", value)
-
-    def bsplineP(self, knots, u, k, control_points, n):
+    def nurbs_surface(self, knotsP, knotsQ, p, q, n, m, control_points, weights, u, v):
+        #computes a point on the surface
         """
-        knots: a list with knot positions
-        u: value between a knot span
-        k: degree of the curve
-        control_points: a list with control points
-        n: len(control_points), the number of control points
+            knotsP: list of knots that contains knots relative to p degree
+            knotsQ: list of knots that contains knots relative to q degree
+            p: first degree
+            q: second degree
+            control_points: matrix of control_points
+            n: points degree(line)
+            m: points degree(column)
+            weights: matrix of weights
+            u: first parameter
+            v: second parameter
         """
-        p_curve = vectors.createEmptyVector(len(control_points[0]))
-        interval = self.find_interval(knots,u)
-        for i in range(n+1):
-            p_curve = vectors.sumV(p_curve, vectors.constantMult(control_points[i], self.bsplineBFunction(knots, u, i, k)))
-        print(p_curve)
-        return p_curve
-
-
-valor = 0
-knots = [0, 0, 0, 1, 2, 3, 3, 4, 4, 4]
-ka = 2
-points = [[0,1], [1,1],[3, 4], [4, 2], [5, 3], [6, 4], [7, 3]]
-Nub = Nurbs(2,0,1,0,points,knots,[],[])
-Nub.bsplineP(knots, valor, ka, points, len(points)-1)
+        downSum = 0
+        upperPart = vectors.createEmptyVector(len(control_points[0][0]))
+        for i in range(n):
+            firstPart = self.bsplineBFunction(knotsP,u,i,p)
+            secondPart = 0
+            secondPart_with_point = vectors.createEmptyVector(len(control_points[0][0]))
+            for j in range(m):
+                aux = self.bsplineBFunction(knotsQ,v,j,q)*weights[i][j]
+                secondPart = secondPart + aux
+                secondPart_with_point = vectors.sumV(secondPart_with_point,vectors.constantMult(control_points[i][j], aux))
+            downSum = downSum + (firstPart*secondPart)
+            upperPart = vectors.sumV(upperPart, vectors.constantMult(secondPart_with_point, firstPart))
+        return vectors.constantMult(upperPart, 1/downSum)

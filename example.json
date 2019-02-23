@@ -18,9 +18,7 @@
 
     "degrees":{
         "Pdegree": 3,
-        "Qdegree": 3,
-        "Ndegree": 5,
-        "Mdegree": 5
+        "Qdegree": 3
     },
     
     "points": [

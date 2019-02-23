@@ -1,3 +1,5 @@
+import auxiliars.vectors as vectors
+
 def checkSpan(u1,u2,u):
     # ui <= u < u1+1
     if u1<=u and u<u2:
@@ -12,29 +14,30 @@ def initializeN(n):
         N.append([])
     return N
 
-def bsplineBFunction(knots, u, i, p, ar):
+def bsplineBFunction(knots, u, i, p):
+    #the B-spline basis function
     if p==0:
-        auxS = 'N'+str(i)+str(p)
-        ar[auxS] = checkSpan(knots[i], knots[i+1], u)
-        return checkSpan(knots[n], knots[i+1], u)
-    aux1 = bsplineBFunction(knots,u,i,p-1, ar)*((u-knots[i]) / (knots[i+p]-knots[i]))
-    aux2 = bsplineBFunction(knots,u,i+1,p-1, ar)*((knots[i+p+1] - u) / (knots[i+p+1] - knots[i+1]))
-    auxS = 'N'+str(i)+str(p)
-    ar[auxS] = aux1 + aux2
+        return checkSpan(knots[i], knots[i+1], u)
+    aux1 = (bsplineBFunction(knots,u,i,p-1)*(u-knots[i])) / (knots[i+p]-knots[i])
+    aux2 = (bsplineBFunction(knots,u,i+1,p-1)*(knots[i+p+1] - u)) / (knots[i+p+1] - knots[i+1])
     return aux1 + aux2
 
-def bSpline(points,knots, u, n, k):
-    ar = {
-
-    }
+def bSplineP(points,knots, u, n, k):
+    #returns a point on a bspline curve
+    PCurve = vectors.createEmptyVector(len(points[0]))
     for a in range(n+1):
-        bsplineBFunction(knots, u, a, k, ar)
-    print(ar)
+        PCurve = vectors.sumV(PCurve, vectors.constantMult(points[a],bsplineBFunction(knots, u, a, k)))
+    return PCurve
+    
 
 
-knots = [0,0.25,0.5,0.75,1]
-points = []
+knots = [0 , 0.25, 0.5, 0.75, 1]
+points = [
+    [1,1,1],
+    [0,2,3],
+    [3,2,4]
+]
 u = 0.1
 n = 2
 k = 1
-bSpline(points, knots, u, n, k)
+print(bSplineP(points, knots, u, n, k))

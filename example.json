@@ -19,8 +19,8 @@
     "degrees":{
         "Udegree": 3,
         "Vdegree": 3,
-        "Ndegree": 6,
-        "Mdegree": 6
+        "Ndegree": 5,
+        "Mdegree": 5
     },
     
     "points": [

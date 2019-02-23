@@ -79,7 +79,15 @@ def crossProduct(vector1, vector2):
     return aux
 
 def normalize(vector1):
+    # normalizes a vector
     aux = cloneV(vector1)
     helper = 1 / (vLen(vector1))
     aux = constantMult(aux, helper)
     return aux
+
+def createEmptyVector(n):
+    #create an empty vector of len n
+    v = []
+    for i in range(n):
+        v.append(0)
+    return(v)

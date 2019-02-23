@@ -1,4 +1,5 @@
 import auxiliars.vectors as vectors
+import ipdb
 
 def checkSpan(u1,u2,u):
     # ui <= u < u1+1
@@ -18,8 +19,14 @@ def bsplineBFunction(knots, u, i, p):
     #the B-spline basis function
     if p==0:
         return checkSpan(knots[i], knots[i+1], u)
-    aux1 = (bsplineBFunction(knots,u,i,p-1)*(u-knots[i])) / (knots[i+p]-knots[i])
-    aux2 = (bsplineBFunction(knots,u,i+1,p-1)*(knots[i+p+1] - u)) / (knots[i+p+1] - knots[i+1])
+    N1 = bsplineBFunction(knots,u,i,p-1)
+    aux1 = 0
+    if N1!=0:
+        aux1 = (N1*(u-knots[i])) / (knots[i+p]-knots[i])
+    N2 = bsplineBFunction(knots,u,i+1,p-1)
+    aux2 = 0
+    if N2!=0:
+        aux2 = (N2*(knots[i+p+1] - u)) / (knots[i+p+1] - knots[i+1])
     return aux1 + aux2
 
 def bSplineP(points,knots, u, n, k):
@@ -37,7 +44,7 @@ points = [
     [0,2,3],
     [3,2,4]
 ]
-u = 0.1
+u = 0
 n = 2
 k = 1
 print(bSplineP(points, knots, u, n, k))

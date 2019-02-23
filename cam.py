@@ -26,7 +26,6 @@ def organizeCam(cam):
         'C': [],
         'vectors': []
     }
-    print(cam['N'])
     if(len(cam['N'])==0 or len(cam['V'])==0):
         raise('please use non empty cam vectors')
     camAux['vectors'] = organizeVectors(cam['N'], cam['V'])

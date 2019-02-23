@@ -1,8 +1,9 @@
 from auxiliars.helpers import getJson 
 import auxiliars.vectors as vectors
 import cam
+import nurbs
 
-entrada = getJson('entrada.json')#get the input
+entrada = getJson('example.json')#get the input
 
 camIn = entrada['cam']
 pointsIn = entrada['points']
@@ -11,3 +12,9 @@ knotsIn = entrada['knots']
 degreesIn = entrada['degrees']
 
 workingCam = cam.organizeCam(camIn)
+nurbsVar = nurbs.Nurbs(
+    degreesIn['Pdegree'], degreesIn['Qdegree'],
+    degreesIn['Ndegree'], degreesIn['Mdegree'],
+    pointsIn, knotsIn['P'], knotsIn['Q'], weightsIn
+)
+print(nurbsVar)

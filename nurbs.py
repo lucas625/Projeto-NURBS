@@ -69,16 +69,15 @@ class Nurbs:
         """
         p_curve = vectors.createEmptyVector(len(control_points[0]))
         interval = self.find_interval(knots,u)
-        for i in range(interval+1):
-            p_curve = vectors.sumV(p_curve, vectors.constantMult(control_points[i], self.bsplineBFunction(knots, u, i, interval)))
+        for i in range(n+1):
+            p_curve = vectors.sumV(p_curve, vectors.constantMult(control_points[i], self.bsplineBFunction(knots, u, i, k)))
         print(p_curve)
         return p_curve
 
 
-valor = 0.55
-knots = [0,0.25,0.5,0.75,1]
+valor = 0
+knots = [0, 0, 0, 1, 2, 3, 3, 4, 4, 4]
 ka = 2
-n = 1
-points = [(1,1,1), (1,3,4)]
+points = [[0,1], [1,1],[3, 4], [4, 2], [5, 3], [6, 4], [7, 3]]
 Nub = Nurbs(2,0,1,0,points,knots,[],[])
-Nub.bsplineP(knots, valor, ka, points, n)
+Nub.bsplineP(knots, valor, ka, points, len(points)-1)

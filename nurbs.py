@@ -11,8 +11,12 @@ class Nurbs:
         self.knotsP = knotsP
         self.knotsQ = knotsQ
         self.weights = weights
-        self.iterations = 0
+        self.iterations = 10
+        #self.normalize_knots()
 
+    def normalize_knots(self):
+        self.knotsP = vectors.normalize(self.knotsP)
+        self.knotsQ = vectors.normalize(self.knotsQ)
 
     def __str__(self):
         p = "p: " + str(self.p)
@@ -86,16 +90,26 @@ class Nurbs:
         upperPart = vectors.createEmptyVector(len(control_points[0][0]))
         for i in range(n+1):
             firstPart = self.bsplineBFunction(knotsP,u,i,p)
-            secondPart = 0
-            secondPart_with_point = vectors.createEmptyVector(len(control_points[0][0]))
-            for j in range(m+1):
-                aux = self.bsplineBFunction(knotsQ,v,j,q)*weights[i][j]
-                secondPart = secondPart + aux
-                secondPart_with_point = vectors.sumV(secondPart_with_point,vectors.constantMult(control_points[i][j], aux))
-            downSum = downSum + (firstPart*secondPart)
-            upperPart = vectors.sumV(upperPart, vectors.constantMult(secondPart_with_point, firstPart))
+            if(firstPart!=0):
+                secondPart = 0
+                secondPart_with_point = vectors.createEmptyVector(len(control_points[0][0]))
+                for j in range(m+1):
+                    aux = self.bsplineBFunction(knotsQ,v,j,q)*weights[i][j]
+                    if(aux!=0):
+                        secondPart = secondPart + aux
+                        secondPart_with_point = vectors.sumV(secondPart_with_point,vectors.constantMult(control_points[i][j], aux))
+                downSum = downSum + (firstPart*secondPart)
+                upperPart = vectors.sumV(upperPart, vectors.constantMult(secondPart_with_point, firstPart))
+        ipdb.set_trace()
         return vectors.constantMult(upperPart, 1/downSum)
     
+    def find_surface(self):
+        fullSurface = []
+        for i in range(self.iterations):
+            for j in range(self.iterations):
+                fullSurface.append(self.nurbs_surface(i/self.iterations, j/self.iterations))
+        return fullSurface
+
     def calculate_Q(self, knots, actual, degree):
         # reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
         #ps: the deltaP will be calculated on tangent.

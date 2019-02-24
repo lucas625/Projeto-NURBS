@@ -17,9 +17,10 @@ nurbsVar = nurbs.Nurbs(
     pointsIn, knotsIn['P'], knotsIn['Q'], weightsIn
 )
 
-ponto = nurbsVar.nurbs_surface(0.2, 0.4) + nurbsVar.nurbs_surface(0.201, 0.401)
+ponto = nurbsVar.nurbs_surface(0, 0)
 
 print(nurbsVar.calculate_Q(nurbsVar.knotsP, 1, nurbsVar.p))
 print(nurbsVar.calculate_Q(nurbsVar.knotsQ, 2, nurbsVar.q))
 print(ponto)
 print(nurbsVar.tangent(0.2,0.4))
+print(nurbsVar)

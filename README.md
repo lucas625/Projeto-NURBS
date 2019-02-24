@@ -34,7 +34,7 @@ Developed using python 3.7.
 
 6. Creating an Input.
 
-    Go to **entrada.json** and add the input in the format of **example.json**, for example if you want n=6 and m=4, then on your points you must use 7 lists each with 5 points, on your weights you must do the same, just instead of points it should be a number.
+    Go to **entrada.json** and add the input in the format of **example.json**, for example if you want n=6 and m=4, then on your control_points you must use 7 lists each with 5 points, on your weights you must do the same, just instead of points it should be a number.
 
 7. Testing.
     ```

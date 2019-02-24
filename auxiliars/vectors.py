@@ -91,3 +91,8 @@ def createEmptyVector(n):
     for i in range(n):
         v.append(0)
     return(v)
+
+def dist_a_b(a,b):
+    checkELen(a,b)
+    aux = subV(a,b)
+    return vLen(aux)

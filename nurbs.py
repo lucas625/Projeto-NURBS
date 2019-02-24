@@ -13,10 +13,21 @@ class Nurbs:
         self.weights = weights
         self.iterations = 10
         #self.normalize_knots()
+        self.normalize_weight()
 
     def normalize_knots(self):
         self.knotsP = vectors.normalize(self.knotsP)
         self.knotsQ = vectors.normalize(self.knotsQ)
+
+    def normalize_weight(self):
+        totalSum = 0
+        for i in range(len(self.weights)):
+            for j in range(len(self.weights[i])):
+                    totalSum = totalSum + self.weights[i][j]
+        for i in range(len(self.weights)):
+            for j in range(len(self.weights[i])):
+                    self.weights[i][j] = self.weights[i][j] / totalSum
+
 
     def __str__(self):
         p = "p: " + str(self.p)
@@ -100,8 +111,11 @@ class Nurbs:
                         secondPart_with_point = vectors.sumV(secondPart_with_point,vectors.constantMult(control_points[i][j], aux))
                 downSum = downSum + (firstPart*secondPart)
                 upperPart = vectors.sumV(upperPart, vectors.constantMult(secondPart_with_point, firstPart))
-        ipdb.set_trace()
-        return vectors.constantMult(upperPart, 1/downSum)
+        #ipdb.set_trace()
+        if(downSum!=0):
+            return vectors.constantMult(upperPart, 1/downSum)
+        else:
+            return upperPart
     
     def find_surface(self):
         fullSurface = []

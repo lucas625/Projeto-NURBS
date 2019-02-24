@@ -17,19 +17,17 @@
     },
 
     "degrees":{
-        "Udegree": 0,
-        "Vdegree": 0,
-        "Ndegree": 0,
-        "Mdegree": 0
+        "Pdegree": 0,
+        "Qdegree": 0
     },
     
-    "points": [
+    "control_points": [
         
     ],
 
     "knots": {
-        "U": [],
-        "V": []
+        "P": [],
+        "Q": []
     },
 
     "weights": [

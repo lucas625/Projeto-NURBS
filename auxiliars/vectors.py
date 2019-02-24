@@ -26,7 +26,7 @@ def sumV(vector1, vector2):
     checkELen(vector1, vector2)
     vectorC = cloneV(vector1)
     for i in range(0, len(vectorC)):
-        vectorC[i] = vectorC[i] + vector2[i]
+        vectorC[i] = vector1[i] + vector2[i]
     return vectorC
 
 def subV(vector1, vector2):
@@ -46,7 +46,7 @@ def constantMult(vector1, k):
     # 3 * u
     vectorAux = cloneV(vector1)
     for i in range(0, len(vectorAux)):
-        vectorAux[i] = vectorAux[i] * k
+        vectorAux[i] = vector1[i] * k
     return vectorAux
 
 def projection(vector1, vector2):
@@ -79,7 +79,15 @@ def crossProduct(vector1, vector2):
     return aux
 
 def normalize(vector1):
+    # normalizes a vector
     aux = cloneV(vector1)
     helper = 1 / (vLen(vector1))
     aux = constantMult(aux, helper)
     return aux
+
+def createEmptyVector(n):
+    #create an empty vector of len n
+    v = []
+    for i in range(n):
+        v.append(0)
+    return(v)

@@ -1,15 +1,15 @@
 import auxiliars.vectors as vectors
 import numpy as np
-
+import ipdb
 
 class Cam:
     def __init__(self, cam):
-        print("cameraaa", cam)
         self.matrix = self.organizeCam(cam)#matrix with homogeneous coordinates
         self.matrix = np.array(self.matrix)
         self.hx = cam['screen']['hx']
         self.hy = cam['screen']['hy']
         self.d = cam['screen']['d']
+
     def __str__(self):
         stringP = "matrix: " + str(self.matrix) + "\n" + "hx: " + str(self.hx) + "\n" + "hy: " + str(self.hy) + "\n" + "d: " + str(self.d)
         stringP = str(stringP)
@@ -31,14 +31,16 @@ class Cam:
             'V': [],
             'N': []
         }
-        newBase['V'] = vectors.ortogonalize(V, N)
+        newBase['V'] = vectors.ortogonalize(N, V)
         newBase['U'] = vectors.crossProduct(N,newBase['V'])
         newBase['N'] = N
+        print("newbase1: ",newBase)
         newBase = self.normalizaBase(newBase)
         BaseCam = []
         newBase['U'].append(translation[0])
         newBase['V'].append(translation[1])
         newBase['N'].append(translation[2])
+        print("newbase2", newBase)
         BaseCam.append(newBase['U'])
         BaseCam.append(newBase['V'])
         BaseCam.append(newBase['N'])
@@ -55,7 +57,6 @@ class Cam:
         camAux = self.organizeVectors(cam['N'], cam['V'], translation)
         camAux = np.array(camAux)
         camAux = camAux.T
-        print("cam aux: ", camAux)
         camAux = camAux.tolist()
         return camAux
 
@@ -67,12 +68,15 @@ class Cam:
         aux = np.matmul(self.matrix, aux)
         aux = aux.T
         aux = aux.tolist()
-        return aux.pop()
+        newP = []
+        for i in range(len(aux[0])-1):
+            newP.append(aux[0][i])
+        return newP
 
     def organizePoints(self, points):
         for i in range(len(points)):
             for j in range(len(points[i])):
-                points[i][j] = self.organize_single_point(point[i][j])
+                points[i][j] = self.organize_single_point(points[i][j])
         return points
                 
 
@@ -80,10 +84,12 @@ class Cam:
         #find point position on screen given width and height
         x1 = (self.d *  point[0]) / point[2] #x1 = x*d / z
         y1 = (self.d * point[1]) / point[2] #y1 = y*d / z
-        newX = ( x1 / (self.hx/2) ) - 0.5 
+        newX = ( x1 / (self.hx*2) ) - 0.5 
         newY = 0.5 - ( y1 / (self.hy*2))#in the case of pixel y increasing to bottom
-        pixelX = floor(newX * width)
-        pixelY = floor(newY * height)
+        pixelX = newX * width
+        pixelY = newY * height
+        pixelX = int(pixelX // 1)
+        pixelY = int(pixelY // 1)
         #we are using floor just to make sure that the newX and newY division wont place them between a non integer
         position = [pixelX, pixelY]
         return position

@@ -12,9 +12,10 @@ knotsIn = entrada['knots']
 degreesIn = entrada['degrees']
 
 workingCam = cam.Cam(camIn)#prepare the cam
+pointsIn = workingCam.organizePoints(pointsIn)#the control points after all camera transformation
 nurbsVar = nurbs.Nurbs(#create the surface
     degreesIn['Pdegree'], degreesIn['Qdegree'],
     len(pointsIn)-1, len(pointsIn[0])-1,
     pointsIn, knotsIn['P'], knotsIn['Q'], weightsIn
 )
-print(workingCam)
+print(nurbsVar)

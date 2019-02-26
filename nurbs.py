@@ -130,7 +130,7 @@ class Nurbs:
         else:
             return upperPart
     
-    def find_surface(self, path, camera):
+    def find_surface(self, draw, camera):
         #find every point of the surface and put it on the path
         #path is the var for drawing
         #cam is the camera
@@ -149,14 +149,10 @@ class Nurbs:
                 p3 = camera.find_position_p(p3,width,height)
                 p4 = camera.find_position_p(p4,width,height)
 
-                path.append((Path.MOVETO, (p1[0],p1[1])))
-                path.append((Path.LINETO, (p2[0],p2[1])))
-                path.append((Path.LINETO, (p4[0],p4[1])))
-                path.append((Path.MOVETO, (p1[0],p1[1])))
-                path.append((Path.LINETO, (p3[0],p3[1])))
+
                 if i+2 == iterations:
-                    path.append((Path.MOVETO, (p3[0],p3[1])))
-                    path.append((Path.LINETO, (p4[0],p4[1])))
+                    draw.path.append((Path.MOVETO, (p3[0],p3[1])))
+                    draw.path.append((Path.LINETO, (p4[0],p4[1])))
 
     def calculate_Q(self, knots, actual, degree):
         # reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html

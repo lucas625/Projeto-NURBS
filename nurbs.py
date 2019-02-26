@@ -1,5 +1,11 @@
 import auxiliars.vectors as vectors
 import ipdb
+import cam
+import matplotlib.path as mpath
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+
+
 class Nurbs:
 
     def __init__(self, p, q, n, m, points, knotsP, knotsQ, weights):
@@ -124,13 +130,33 @@ class Nurbs:
         else:
             return upperPart
     
-    def find_surface(self):
-        #find every point of the surface
-        fullSurface = []
-        for i in range(self.iterations):
-            for j in range(self.iterations):
-                fullSurface.append(self.nurbs_surface(i/self.iterations, j/self.iterations))
-        return fullSurface
+    def find_surface(self, path, camera):
+        #find every point of the surface and put it on the path
+        #path is the var for drawing
+        #cam is the camera
+        width = 0
+        height = 0
+        #we are using them equal to 0 because we are using mathplot lib
+        for i in range(self.iterations-1):
+            for j in range(self.iterations-1):
+                p1 = self.nurbs_surface(i/self.iterations, j/self.iterations)
+                p2 = self.nurbs_surface(i/self.iterations, j+1/self.iterations)
+                p3 = self.nurbs_surface(i+1/self.iterations, j/self.iterations)
+                p4 = self.nurbs_surface(i+1/self.iterations, j+1/self.iterations)
+                #we have the points, now we need to find the projection since they are already transformed them
+                p1 = camera.find_position_p(p1,width,height)
+                p2 = camera.find_position_p(p2,width,height)
+                p3 = camera.find_position_p(p3,width,height)
+                p4 = camera.find_position_p(p4,width,height)
+
+                path.append((Path.MOVETO, (p1[0],p1[1])))
+                path.append((Path.LINETO, (p2[0],p2[1])))
+                path.append((Path.LINETO, (p4[0],p4[1])))
+                path.append((Path.MOVETO, (p1[0],p1[1])))
+                path.append((Path.LINETO, (p3[0],p3[1])))
+                if i+2 == iterations:
+                    path.append((Path.MOVETO, (p3[0],p3[1])))
+                    path.append((Path.LINETO, (p4[0],p4[1])))
 
     def calculate_Q(self, knots, actual, degree):
         # reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html

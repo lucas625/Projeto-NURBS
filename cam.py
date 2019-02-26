@@ -83,8 +83,9 @@ class Cam:
         y1 = (self.d * point[1]) / point[2] #y1 = y*d / z
         newX = ( x1 / (self.hx*2) ) - 0.5 
         newY = 0.5 - ( y1 / (self.hy*2))#in the case of pixel y increasing to bottom
-        pixelX = newX * width
-        pixelY = newY * height
+        #since we are using math plot lib instead of drawing by ourselves, we do not need to care about the screen height or width
+        #pixelX = newX * width
+        #pixelY = newY * height
         pixelX = int(pixelX // 1)
         pixelY = int(pixelY // 1)
         #we are using floor just to make sure that the newX and newY division wont place them between a non integer

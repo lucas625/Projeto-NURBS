@@ -3,7 +3,7 @@ import auxiliars.vectors as vectors
 import cam
 import nurbs
 
-entrada = getJson('entrada.json')#get the input
+entrada = getJson('example.json')#get the input
 
 camIn = entrada['cam']
 pointsIn = entrada['control_points']
@@ -86,9 +86,7 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        p = nurbsVar.find_surface
-        print("The surface is: ")
-        print(p)
+        p = nurbs_with_cam.find_surface(cam)
 
     elif inp == '3':
         #here we will find a specific point on the surface

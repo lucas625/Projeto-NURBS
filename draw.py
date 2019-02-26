@@ -28,7 +28,7 @@ def drawPoints(control_points):
 
     plt.show()
 
-"""pontos = [
+pontos = [
     [
         [1,1], [2,2], [4,6]
     ],
@@ -39,4 +39,4 @@ def drawPoints(control_points):
         [1,3], [8,10], [4,7] 
     ]
 ]
-drawPoints(pontos)"""
+drawPoints(pontos)

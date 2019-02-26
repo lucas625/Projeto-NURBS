@@ -7,13 +7,20 @@ class Nurbs:
         self.q = q
         self.n = n
         self.m = m
-        self.control_points = points
-        self.knotsP = knotsP
-        self.knotsQ = knotsQ
+        self.control_points = vectors.clone_m(points)
+        self.knotsP = vectors.cloneV(knotsP)
+        self.knotsQ = vectors.cloneV(knotsQ)
         self.weights = weights
+        self.weights = self.clone_weights()
         self.iterations = 10
         #self.normalize_knots()
         self.normalize_weight()
+
+    def clone_weights(self):
+        aux = []
+        for i in range(len(self.weights)):
+            aux.append(vectors.cloneV(self.weights[i]))
+        return aux
 
     def normalize_knots(self):
         self.knotsP = vectors.normalize(self.knotsP)
@@ -118,6 +125,7 @@ class Nurbs:
             return upperPart
     
     def find_surface(self):
+        #find every point of the surface
         fullSurface = []
         for i in range(self.iterations):
             for j in range(self.iterations):

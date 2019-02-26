@@ -34,18 +34,15 @@ class Cam:
         newBase['V'] = vectors.ortogonalize(N, V)
         newBase['U'] = vectors.crossProduct(N,newBase['V'])
         newBase['N'] = N
-        print("newbase1: ",newBase)
         newBase = self.normalizaBase(newBase)
         BaseCam = []
         newBase['U'].append(translation[0])
         newBase['V'].append(translation[1])
         newBase['N'].append(translation[2])
-        print("newbase2", newBase)
         BaseCam.append(newBase['U'])
         BaseCam.append(newBase['V'])
         BaseCam.append(newBase['N'])
         BaseCam.append([0,0,0,1])
-        print(BaseCam)
         return BaseCam
 
     def organizeCam(self, cam):

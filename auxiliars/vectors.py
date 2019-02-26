@@ -1,4 +1,5 @@
 # main functions for work with vectors
+import ipdb
 
 def checkELen(vector1, vector2):
     # check if the vectors have the same len
@@ -96,3 +97,11 @@ def dist_a_b(a,b):
     checkELen(a,b)
     aux = subV(a,b)
     return vLen(aux)
+
+def clone_m(M):
+    total = []
+    for i in range(len(M)):
+        total.append([])
+        for j in range(len(M[i])):
+            total[i].append(cloneV(M[i][j]))
+    return total

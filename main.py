@@ -55,7 +55,7 @@ def create_comands():
     c_all.append('Find specific point.')#3
     c_all.append('Find tangent.')#4
     c_all.append('Find bounding box.')#5
-    c_all.append('Draw.')#7
+    c_all.append('Draw.')#6
     c_all.append('Quit Program.')#7
     commands = ''
     for i in range(len(c_all)):
@@ -106,19 +106,16 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        point_Screen = nurbsVar.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
+        point_Screen = nurbs_with_cam.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
         drawp.drawPoints(point_Screen, 'cyan', '', False)
 
     elif inp == '3':
         #here we will find a specific point on the surface
         inp = get_uv()
-        p = nurbsVar.nurbs_surface(inp[0],inp[1])
+        p = nurbs_with_cam.nurbs_surface(inp[0],inp[1])
         p = workingCam.organize_single_point(p)
         p = workingCam.find_position_p(p,drawp.width,drawp.height)
         drawp.draw_single_p(p,'black', 8)
-        print("The point is: ")
-        print(p)
-            #still need to draw
 
     elif inp == '4':
         #here we will find a tangent

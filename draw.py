@@ -33,14 +33,14 @@ class Draw:
                 if with_p:
                     self.draw_single_p([x[0],y[0]], color_p, 6)#ploting the 1st point
                     self.draw_single_p([x[1],y[1]], color_p, 6)#ploting the 2st point
-                self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 3)
+                self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 1)
                 
         for j in range(b):
             for i in range(a-1):
                 #b00 -> b10
                 x = [control_points[i][j][0], control_points[i+1][j][0]]
                 y = [control_points[i][j][1], control_points[i+1][j][1]]
-                self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 3)
+                self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 1)
 
     """def draw_bouding_box(self, bb, color_line, color_p):
         for i in range(len(bb)-1):

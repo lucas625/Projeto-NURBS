@@ -72,11 +72,7 @@ class Nurbs:
             p: degree
         """
         if p==0:
-            try:
-                return self.checkSpan(knots[i], knots[i+1], u)
-            except:
-                print("deu erro", i)
-                raise()
+            return self.checkSpan(knots[i], knots[i+1], u)
         N1 = self.bsplineBFunction(knots,u,i,p-1)
         aux1 = 0
         if N1!=0:
@@ -146,7 +142,6 @@ class Nurbs:
 
                 else:
                     p1 = self.nurbs_surface(i/self.iterations, j/self.iterations)
-                print(p1)
                 #we have the points, now we need to find the projection since they are already transformed them
                 p1 = camera.organize_single_point(p1)
                 p1 = camera.find_position_p(p1,width,height)

@@ -17,7 +17,7 @@ degreesIn = entrada['degrees']
 width = 500
 height = 500
 
-our_svg = open('answer.svg','r+')#our answer
+our_svg = open('answer.svg','w')#our answer
 drawp = draw.Draw(our_svg, width, height)#our class draw
 
 nurbsVar = nurbs.Nurbs(#create the surface class
@@ -103,6 +103,7 @@ def checkIn(inp, commands):
                 print("Sorry, invalid input.\nType the new number of iterations again, please.\nOr use 0 to cancel.")
                 new_iterations = input()
         nurbsVar.set_iterations(new_iterations)
+        nurbs_with_cam.set_iterations(new_iterations)
 
     elif inp == '2':
         #here we will draw the surface

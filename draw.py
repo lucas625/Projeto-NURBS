@@ -11,7 +11,8 @@ class Draw:
     def order_draw(self):
         plt.show()
 
-    
+    def draw_single_p(self, point, color_p):
+        plt.scatter(point[0], point[1], color=color_p, s=200)
 
     def drawPoints(self, control_points, color_line, color_p, with_p):
         #send a matrix and draw it, basically we will be using this for the control points
@@ -24,7 +25,6 @@ class Draw:
                 y = [control_points[i][j][1], control_points[i][j+1][1]]
                 if with_p:
                     plt.scatter(x, y, color=color_p, s=100)#ploting the 1st point
-                    plt.scatter(x, y, color=color_p, s=100)#ploting the 1st point
                 plt.plot(x, y, color_line, linewidth=3)
                 
         for j in range(b):
@@ -34,7 +34,20 @@ class Draw:
                     y = [control_points[i][j][1], control_points[i+1][j][1]]
                 plt.plot(x, y, color_line, linewidth=3)
 
-
+    """def draw_bouding_box(self, bb, color_line, color_p):
+        for i in range(len(bb)-1):
+            x = [bb[i][0], bb[i+1][0]]
+            y = [bb[i][1], bb[i+1][1]]
+            plt.scatter(x, y, color=color_p, s=100)
+            plt.plot(x, y, color_line, linewidth=3)
+        for i in range(len(bb)-2):
+            x = [bb[i][0], bb[i+2][0]]
+            y = [bb[i][1], bb[i+2][1]]
+            plt.plot(x, y, color_line, linewidth=3)
+        for i in range(len(bb)-4):
+            x = [bb[i][0], bb[i+4][0]]
+            y = [bb[i][1], bb[i+4][1]]
+            plt.plot(x, y, color_line, linewidth=3)"""
         
 """d = Draw()
 pontos = [

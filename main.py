@@ -28,12 +28,8 @@ nurbs_with_cam = nurbs.Nurbs(#create the surface class but with points already t
 )
 control_screen = workingCam.find_control_screen(nurbs_with_cam.control_points, 0, 0)
 drawp = draw.Draw()#our class draw
-point_Screen = []#our matrix with all points on the curve
-p_s = [False]#if the point_Screen wasn't instancied yet
-changed_iterations = [False]#if we changed the number of iterations
-bb = nurbs_with_cam.bounding_Box()#our bounding box
-go_bb = [False]
-bb_screen = []
+bb = nurbsVar.bounding_Box()#our bounding box
+
 
 
 def go_draw():
@@ -89,7 +85,6 @@ def checkIn(inp, commands):
                 new_iterations = int(new_iterations)
                 if new_iterations > 0:
                     ok = True
-                    changed_iterations[0] = True
                 elif new_iteration == 0:
                     return True
                 else:
@@ -101,10 +96,7 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        if changed_iterations[0] or (not p_s[0]):
-            point_Screen = nurbs_with_cam.find_surface(workingCam)#now we have the points on screen
-        changed_iterations[0] = False
-        p_s[0] = True
+        point_Screen = nurbsVar.find_surface(workingCam)#now we have the points on screen
         drawp.drawPoints(point_Screen, 'c-', '', False)
         go_draw()
 
@@ -113,8 +105,12 @@ def checkIn(inp, commands):
         #here we will find a specific point on the surface
         inp = get_uv()
         p = nurbsVar.nurbs_surface(inp[0],inp[1])
+        p = workingCam.organize_single_point(p)
+        p = workingCam.find_position_p(p,0,0)
+        drawp.draw_single_p(p,'k')
         print("The point is: ")
         print(p)
+        checkIn('2',commands)
             #still need to draw
 
     elif inp == '4':
@@ -126,15 +122,28 @@ def checkIn(inp, commands):
 
     elif inp == '5':
         #here we will find the bounding box
-        if not go_bb[0]:
-            bb_p = workingCam.find_position_p(bb, 0, 0)
-        for i in range(len(bb_p)):
-            bb_screen.append([])
-            for j in range(len(bb_p[0])):
-                bb_screen.append(bb_p[i][j])
-
-        drawp.drawPoints(bb, 'k-', 'y', True)#control polygon
-        go_draw()
+        print("the bounding box:")
+        print("1 - min x min y min z ", bb[0])
+        print("2 - min x min y max z ", bb[1])
+        print("3 - min x max y min z ", bb[2])
+        print("4 - min x max y max z ", bb[3])
+        print("5 - max x min y min z ", bb[4])
+        print("6 - max x min y max z ", bb[5])
+        print("7 - max x max y min z ", bb[6])
+        print("8 - max x max y max z ", bb[7])
+        print("bouding box lines:")
+        print(bb[0], '-', bb[1])
+        print(bb[0], '-', bb[2])
+        print(bb[0], '-', bb[4])
+        print(bb[1], '-', bb[3])
+        print(bb[1], '-', bb[5])
+        print(bb[2], '-', bb[3])
+        print(bb[2], '-', bb[6])
+        print(bb[3], '-', bb[7])
+        print(bb[4], '-', bb[5])
+        print(bb[4], '-', bb[6])
+        print(bb[5], '-', bb[7])
+        print(bb[6], '-', bb[7])
 
     elif inp == '6':
         return False
@@ -152,6 +161,6 @@ def keepExecuting():
     while(executing):
         print("Please use a command.")
         inp = input()
-        executing = checkIn(inp, commands, )
+        executing = checkIn(inp, commands)
 
 keepExecuting()

@@ -15,7 +15,7 @@ class Nurbs:
         self.knotsQ = vectors.cloneV(knotsQ)
         self.weights = weights
         self.weights = self.clone_weights()
-        self.iterations = 10
+        self.iterations = 20
         #self.normalize_knots()
         self.normalize_weight()
 
@@ -140,6 +140,7 @@ class Nurbs:
             for j in range(self.iterations):
                 p1 = self.nurbs_surface(i/self.iterations, j/self.iterations)
                 #we have the points, now we need to find the projection since they are already transformed them
+                p1 = camera.organize_single_point(p1)
                 p1 = camera.find_position_p(p1,width,height)
                 plots[i].append(p1)
         return plots

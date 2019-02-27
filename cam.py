@@ -34,18 +34,15 @@ class Cam:
         newBase['V'] = vectors.ortogonalize(N, V)
         newBase['U'] = vectors.crossProduct(N,newBase['V'])
         newBase['N'] = N
-        print("newbase1: ",newBase)
         newBase = self.normalizaBase(newBase)
         BaseCam = []
         newBase['U'].append(translation[0])
         newBase['V'].append(translation[1])
         newBase['N'].append(translation[2])
-        print("newbase2", newBase)
         BaseCam.append(newBase['U'])
         BaseCam.append(newBase['V'])
         BaseCam.append(newBase['N'])
         BaseCam.append([0,0,0,1])
-        print(BaseCam)
         return BaseCam
 
     def organizeCam(self, cam):
@@ -82,14 +79,28 @@ class Cam:
 
     def find_position_p(self, point, width, height):
         #find point position on screen given width and height
-        x1 = (self.d *  point[0]) / point[2] #x1 = x*d / z
-        y1 = (self.d * point[1]) / point[2] #y1 = y*d / z
+        a=point[2]
+        if point[2] == 0:
+            a =1
+        x1 = (self.d *  point[0]) / a #x1 = x*d / z
+        y1 = (self.d * point[1]) / a #y1 = y*d / z
         newX = ( x1 / (self.hx*2) ) - 0.5 
         newY = 0.5 - ( y1 / (self.hy*2))#in the case of pixel y increasing to bottom
-        pixelX = newX * width
-        pixelY = newY * height
+        #since we are using math plot lib instead of drawing by ourselves, we do not need to care about the screen height or width
+        pixelX = newX
+        pixelY = newY
+        #pixelX = pixelX * width
+        #pixelY = pixelY * height
         pixelX = int(pixelX // 1)
         pixelY = int(pixelY // 1)
         #we are using floor just to make sure that the newX and newY division wont place them between a non integer
         position = [pixelX, pixelY]
         return position
+
+    def find_control_screen(self, control_points, width, height):
+        points = []
+        for i in range(len(control_points)):
+            points.append([])
+            for j in range(len(control_points[i])):
+                points[i].append(self.organize_single_point(control_points[i][j]))
+        return points

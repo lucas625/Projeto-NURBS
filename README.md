@@ -35,7 +35,9 @@ Developed using python 3.7.
 6. Creating an Input.
 
     Go to **entrada.json** and add the input in the format of **example.json**, for example if you want n=6 and m=4, then on your control_points you must use 7 lists each with 5 points, on your weights you must do the same, just instead of points it should be a number.
-    Pay attention that every knot must be between 0 and 1
+    Pay attention that every knot must be between 0 and 1.
+
+    Once you start using the program you will be given instructions on what you are able to do. The entire program works only on terminal and once you draw the surface, you will have to close the surface to rerun the program.
 
 7. Testing.
     ```

@@ -1,5 +1,8 @@
 import auxiliars.vectors as vectors
 import ipdb
+import cam
+
+
 class Nurbs:
 
     def __init__(self, p, q, n, m, points, knotsP, knotsQ, weights):
@@ -7,13 +10,20 @@ class Nurbs:
         self.q = q
         self.n = n
         self.m = m
-        self.control_points = points
-        self.knotsP = knotsP
-        self.knotsQ = knotsQ
+        self.control_points = vectors.clone_m(points)
+        self.knotsP = vectors.cloneV(knotsP)
+        self.knotsQ = vectors.cloneV(knotsQ)
         self.weights = weights
-        self.iterations = 10
+        self.weights = self.clone_weights()
+        self.iterations = 20
         #self.normalize_knots()
         self.normalize_weight()
+
+    def clone_weights(self):
+        aux = []
+        for i in range(len(self.weights)):
+            aux.append(vectors.cloneV(self.weights[i]))
+        return aux
 
     def normalize_knots(self):
         self.knotsP = vectors.normalize(self.knotsP)
@@ -117,12 +127,24 @@ class Nurbs:
         else:
             return upperPart
     
-    def find_surface(self):
-        fullSurface = []
+    def find_surface(self, camera):
+        #find every point of the surface and put it on the path
+        #path is the var for drawing
+        #cam is the camera
+        width = 0
+        height = 0
+        plots =[]#this will be send to a function on draw.py to draw all points on it
+        #we are using them equal to 0 because we are using mathplot lib
         for i in range(self.iterations):
+            plots.append([])
             for j in range(self.iterations):
-                fullSurface.append(self.nurbs_surface(i/self.iterations, j/self.iterations))
-        return fullSurface
+                p1 = self.nurbs_surface(i/self.iterations, j/self.iterations)
+                #we have the points, now we need to find the projection since they are already transformed them
+                p1 = camera.organize_single_point(p1)
+                p1 = camera.find_position_p(p1,width,height)
+                plots[i].append(p1)
+        return plots
+                
 
     def calculate_Q(self, knots, actual, degree):
         # reference: https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/B-spline/bspline-derv.html
@@ -190,3 +212,42 @@ class Nurbs:
         #now to partialV
         partialV = vectors.constantMult(vectors.subV(vectors.constantMult(upperPartV, downSum), vectors.constantMult(upperPart, downSumV)), (1/(downSum**2)))
         return vectors.crossProduct(partialU, partialV)
+
+    def bounding_Box(self):
+        max_x = self.control_points[0][0][0]
+        min_x = self.control_points[0][0][0]
+        max_y = self.control_points[0][0][1]
+        min_y = self.control_points[0][0][1]
+        max_z = self.control_points[0][0][2]
+        min_z = self.control_points[0][0][2]
+        #now we have to find the real max/min
+        for i in range(len(self.control_points)):
+            for j in range(len(self.control_points[i])):
+                aux = self.control_points[i][j]
+
+                if(aux[0]>max_x):
+                    max_x = aux[0]
+                elif(aux[0]<min_x):
+                    min_x = aux[0]
+
+                if(aux[1]>max_y):
+                    max_y = aux[1]
+                elif(aux[1]<min_y):
+                    min_y = aux[1]
+
+                if(aux[2]>max_z):
+                    max_z = aux[2]
+                elif(aux[2]<min_z):
+                    min_z = aux[2]
+
+        points = []
+        points.append([min_x,min_y,min_z])
+        points.append([min_x,min_y,max_z])
+        points.append([min_x,max_y,min_z])
+        points.append([min_x,max_y,max_z])
+
+        points.append([max_x,min_y,min_z])
+        points.append([max_x,min_y,max_z])
+        points.append([max_x,max_y,min_z])
+        points.append([max_x,max_y,max_z])
+        return points

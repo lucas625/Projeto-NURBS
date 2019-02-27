@@ -2,6 +2,7 @@ from auxiliars.helpers import getJson
 import auxiliars.vectors as vectors
 import cam
 import nurbs
+import draw
 
 entrada = getJson('example.json')#get the input
 
@@ -25,7 +26,20 @@ nurbs_with_cam = nurbs.Nurbs(#create the surface class but with points already t
     len(pointsIn)-1, len(pointsIn[0])-1,
     pointsIn, knotsIn['P'], knotsIn['Q'], weightsIn
 )
+control_screen = workingCam.find_control_screen(nurbs_with_cam.control_points, 0, 0)
+drawp = draw.Draw()#our class draw
+point_Screen = []#our matrix with all points on the curve
+p_s = [False]#if the point_Screen wasn't instancied yet
+changed_iterations = [False]#if we changed the number of iterations
+bb = nurbs_with_cam.bounding_Box()#our bounding box
+go_bb = [False]
+bb_screen = []
 
+
+def go_draw():
+    drawp.drawPoints(control_screen, 'go-', 'r', True)#control polygon
+    drawp.order_draw()
+    
 def create_comands():
     #creates the string of commands
     c_all = []
@@ -75,6 +89,7 @@ def checkIn(inp, commands):
                 new_iterations = int(new_iterations)
                 if new_iterations > 0:
                     ok = True
+                    changed_iterations[0] = True
                 elif new_iteration == 0:
                     return True
                 else:
@@ -86,7 +101,13 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        p = nurbs_with_cam.find_surface(cam)
+        if changed_iterations[0] or (not p_s[0]):
+            point_Screen = nurbs_with_cam.find_surface(workingCam)#now we have the points on screen
+        changed_iterations[0] = False
+        p_s[0] = True
+        drawp.drawPoints(point_Screen, 'c-', '', False)
+        go_draw()
+
 
     elif inp == '3':
         #here we will find a specific point on the surface
@@ -105,7 +126,16 @@ def checkIn(inp, commands):
 
     elif inp == '5':
         #here we will find the bounding box
-        x=10
+        if not go_bb[0]:
+            bb_p = workingCam.find_position_p(bb, 0, 0)
+        for i in range(len(bb_p)):
+            bb_screen.append([])
+            for j in range(len(bb_p[0])):
+                bb_screen.append(bb_p[i][j])
+
+        drawp.drawPoints(bb, 'k-', 'y', True)#control polygon
+        go_draw()
+
     elif inp == '6':
         return False
     else: 
@@ -122,7 +152,6 @@ def keepExecuting():
     while(executing):
         print("Please use a command.")
         inp = input()
-        executing = checkIn(inp, commands)
-
+        executing = checkIn(inp, commands, )
 
 keepExecuting()

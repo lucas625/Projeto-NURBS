@@ -24,7 +24,7 @@ class Cam:
             baseAux[i] = aux
         return baseAux
 
-    def organizeVectors(self, N, V, translation):
+    def organizeVectors(self, N, V):
         # set the vectors of the camera to the desired model
         newBase = {
             'U': [],
@@ -36,13 +36,11 @@ class Cam:
         newBase['N'] = N
         newBase = self.normalizaBase(newBase)
         BaseCam = []
-        newBase['U'].append(translation[0])
-        newBase['V'].append(translation[1])
-        newBase['N'].append(translation[2])
+        
         BaseCam.append(newBase['U'])
         BaseCam.append(newBase['V'])
         BaseCam.append(newBase['N'])
-        BaseCam.append([0,0,0,1])
+        
         return BaseCam
 
     def organizeCam(self, cam):
@@ -51,10 +49,16 @@ class Cam:
         if(len(cam['N'])==0 or len(cam['V'])==0):
             raise('please use non empty cam vectors')
         translation = vectors.constantMult(cam['C'],-1)
-        camAux = self.organizeVectors(cam['N'], cam['V'], translation)
+        camAux = self.organizeVectors(cam['N'], cam['V'])
         camAux = np.array(camAux)
         camAux = camAux.T
         camAux = camAux.tolist()
+        
+        camAux[0].append(translation[0])
+        camAux[1].append(translation[1])
+        camAux[2].append(translation[2])
+        camAux.append([0,0,0,1])
+        
         return camAux
 
     def organize_single_point(self, point):

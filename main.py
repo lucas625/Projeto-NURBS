@@ -107,7 +107,7 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        point_Screen = nurbs_with_cam.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
+        point_Screen = nurbsVar.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
         drawp.drawPoints(point_Screen, 'cyan', '', False)
 
     elif inp == '3':

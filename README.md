@@ -41,5 +41,5 @@ Developed using python 3.7.
 
 7. Testing.
     ```
-    Use python3 main.py to test
+    Use python3 main.py
     ```

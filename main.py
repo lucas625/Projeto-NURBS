@@ -12,6 +12,9 @@ weightsIn = entrada['weights']
 knotsIn = entrada['knots']
 degreesIn = entrada['degrees']
 
+width = 1000
+height = 1000
+drawp = draw.Draw(width, height)#our class draw
 
 nurbsVar = nurbs.Nurbs(#create the surface class
     degreesIn['Pdegree'], degreesIn['Qdegree'],
@@ -26,8 +29,8 @@ nurbs_with_cam = nurbs.Nurbs(#create the surface class but with points already t
     len(pointsIn)-1, len(pointsIn[0])-1,
     pointsIn, knotsIn['P'], knotsIn['Q'], weightsIn
 )
-control_screen = workingCam.find_control_screen(nurbs_with_cam.control_points, 0, 0)
-drawp = draw.Draw()#our class draw
+control_screen = workingCam.find_control_screen(nurbs_with_cam.control_points, drawp.width, drawp.height)
+
 bb = nurbsVar.bounding_Box()#our bounding box
 
 
@@ -42,11 +45,12 @@ def create_comands():
     c_all.append('Commands: ')
     c_all.append('See the commands.')#0
     c_all.append('Change iterations')#1
-    c_all.append('Draw surface.')#2
+    c_all.append('Load surface.')#2
     c_all.append('Find specific point.')#3
     c_all.append('Find tangent.')#4
     c_all.append('Find bounding box.')#5
-    c_all.append('Quit Program.')#6
+    c_all.append('Draw.')#7
+    c_all.append('Quit Program.')#7
     commands = ''
     for i in range(len(c_all)):
         if i>0:
@@ -96,21 +100,18 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        point_Screen = nurbsVar.find_surface(workingCam)#now we have the points on screen
+        point_Screen = nurbsVar.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
         drawp.drawPoints(point_Screen, 'c-', '', False)
-        go_draw()
-
 
     elif inp == '3':
         #here we will find a specific point on the surface
         inp = get_uv()
         p = nurbsVar.nurbs_surface(inp[0],inp[1])
         p = workingCam.organize_single_point(p)
-        p = workingCam.find_position_p(p,0,0)
+        p = workingCam.find_position_p(p,drawp.width,drawp.height)
         drawp.draw_single_p(p,'k')
         print("The point is: ")
         print(p)
-        checkIn('2',commands)
             #still need to draw
 
     elif inp == '4':
@@ -146,6 +147,10 @@ def checkIn(inp, commands):
         print(bb[6], '-', bb[7])
 
     elif inp == '6':
+        go_draw()
+        return False
+
+    elif inp == '7':
         return False
     else: 
         print('invalid command, type again please.')

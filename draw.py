@@ -3,12 +3,16 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
 class Draw:
-    def __init__(self):
+    def __init__(self, width, height):
         self.fig, self.ax = plt.subplots()
         self.Path = mpath.Path
         self.path_data = path_data = []
+        self.width = width
+        self.height = height
 
     def order_draw(self):
+        #plt.xlim((0, self.width))   # set the ylim to bottom, top
+        #plt.ylim(0, self.height)
         plt.show()
 
     def draw_single_p(self, point, color_p):

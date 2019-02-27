@@ -79,20 +79,19 @@ class Cam:
 
     def find_position_p(self, point, width, height):
         #find point position on screen given width and height
-        a=point[2]
+        a=(-1)*point[2]
         if point[2] == 0:
-            a =1
-        x1 = (self.d *  point[0]) / a #x1 = x*d / z
-        y1 = (self.d * point[1]) / a #y1 = y*d / z
-        newX = ( x1 / (self.hx*2) ) - 0.5 
-        newY = 0.5 - ( y1 / (self.hy*2))#in the case of pixel y increasing to bottom
-        #since we are using math plot lib instead of drawing by ourselves, we do not need to care about the screen height or width
-        pixelX = newX
-        pixelY = newY
-        #pixelX = pixelX * width
-        #pixelY = pixelY * height
-        pixelX = int(pixelX // 1)
-        pixelY = int(pixelY // 1)
+            a = -1
+        a = a*self.d
+        x1 = (point[0]) / a #x1 = x*d / z
+        y1 = (point[1]) / a #y1 = y*d / z
+        pNDCX = (x1 + self.hx) / (2 * self.hx)
+        pNDCY = (y1 + self.hy) / (2*self.hy)
+        newX = (pNDCX * width)
+        newY = ((1-pNDCY) * height)
+        #since we are using math plot lib ins#tead of drawing by ourselves, we do not need to care about the screen height or width
+        pixelX = int(newX // 1)
+        pixelY = int(newY // 1)
         #we are using floor just to make sure that the newX and newY division wont place them between a non integer
         position = [pixelX, pixelY]
         return position
@@ -102,5 +101,7 @@ class Cam:
         for i in range(len(control_points)):
             points.append([])
             for j in range(len(control_points[i])):
-                points[i].append(self.organize_single_point(control_points[i][j]))
+                aux = self.organize_single_point(control_points[i][j])
+                #aux = self.find_position_p(aux, width, height)
+                points[i].append(aux)
         return points

@@ -15,9 +15,9 @@ class Nurbs:
         self.knotsQ = vectors.cloneV(knotsQ)
         self.weights = weights
         self.weights = self.clone_weights()
-        self.iterations = 20
+        self.iterations = 50
         #self.normalize_knots()
-        self.normalize_weight()
+        #self.normalize_weight()
 
     def clone_weights(self):
         aux = []
@@ -72,7 +72,11 @@ class Nurbs:
             p: degree
         """
         if p==0:
-            return self.checkSpan(knots[i], knots[i+1], u)
+            try:
+                return self.checkSpan(knots[i], knots[i+1], u)
+            except:
+                print("deu erro", i)
+                raise()
         N1 = self.bsplineBFunction(knots,u,i,p-1)
         aux1 = 0
         if N1!=0:
@@ -127,21 +131,25 @@ class Nurbs:
         else:
             return upperPart
     
-    def find_surface(self, camera):
+    def find_surface(self, camera, width, height):
         #find every point of the surface and put it on the path
         #path is the var for drawing
         #cam is the camera
-        width = 0
-        height = 0
         plots =[]#this will be send to a function on draw.py to draw all points on it
         #we are using them equal to 0 because we are using mathplot lib
         for i in range(self.iterations):
             plots.append([])
             for j in range(self.iterations):
-                p1 = self.nurbs_surface(i/self.iterations, j/self.iterations)
+                p1 = 0
+                if i == 0 and j == 0:
+                    p1 = self.control_points[0][0]
+
+                else:
+                    p1 = self.nurbs_surface(i/self.iterations, j/self.iterations)
+                print(p1)
                 #we have the points, now we need to find the projection since they are already transformed them
                 p1 = camera.organize_single_point(p1)
-                p1 = camera.find_position_p(p1,width,height)
+                #p1 = camera.find_position_p(p1,width,height)
                 plots[i].append(p1)
         return plots
                 

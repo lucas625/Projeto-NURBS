@@ -39,6 +39,8 @@ Developed using python 3.7.
 
     Once you start using the program you will be given instructions on what you are able to do. The entire program works only on terminal and once you draw the surface, you will have to close the surface to rerun the program.
 
+    Once you run the test, if you load the curve it will take a bit after all the points are calculated because matplotlib is a bit slow on this case.
+
 7. Testing.
     ```
     Use python3 main.py

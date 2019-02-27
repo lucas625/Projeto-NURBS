@@ -101,7 +101,7 @@ def checkIn(inp, commands):
 
     elif inp == '2':
         #here we will draw the surface
-        point_Screen = nurbsVar.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
+        point_Screen = nurbs_with_cam.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
         drawp.drawPoints(point_Screen, 'c-', '', False)
 
     elif inp == '3':
@@ -109,7 +109,7 @@ def checkIn(inp, commands):
         inp = get_uv()
         p = nurbsVar.nurbs_surface(inp[0],inp[1])
         p = workingCam.organize_single_point(p)
-        p = workingCam.find_position_p(p,drawp.width,drawp.height)
+        #p = workingCam.find_position_p(p,drawp.width,drawp.height)
         drawp.draw_single_p(p,'k')
         print("The point is: ")
         print(p)

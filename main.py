@@ -4,7 +4,7 @@ import cam
 import nurbs
 import draw
 
-entrada = getJson('example.json')#get the input
+entrada = getJson('entrada.json')#get the input
 
 camIn = entrada['cam']
 pointsIn = entrada['control_points']

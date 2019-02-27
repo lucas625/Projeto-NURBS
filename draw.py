@@ -14,7 +14,7 @@ class Draw:
         self.our_svg.close()
 
     def draw_single_p(self, point, color_p, tamanho):
-        inicio = '<circle cx="'+str(point[0])+'" cy="'+str(point[1])+'" r="'+str(tamanho)+'" stroke="'+str(color_p)+'" fill="'+str(color_p)+'" stroke-width="1"/>\n'
+        inicio = '<circle cx="'+str(point[0])+'" cy="'+str(point[1])+'" r="'+str(tamanho)+'" stroke="'+str(color_p)+'" fill="'+str(color_p)+'" stroke-width="'+str(tamanho)+'"/>\n'
         self.our_svg.write(inicio)
 
     def draw__line(self, point1, point2, color_p, tamanho):
@@ -31,8 +31,8 @@ class Draw:
                 x = [control_points[i][j][0], control_points[i][j+1][0]]
                 y = [control_points[i][j][1], control_points[i][j+1][1]]
                 if with_p:
-                    self.draw_single_p([x[0],y[0]], color_p, 6)#ploting the 1st point
-                    self.draw_single_p([x[1],y[1]], color_p, 6)#ploting the 2st point
+                    self.draw_single_p([x[0],y[0]], color_p, 30)#ploting the 1st point
+                    self.draw_single_p([x[1],y[1]], color_p, 30)#ploting the 2st point
                 self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 1)
                 
         for j in range(b):

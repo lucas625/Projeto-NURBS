@@ -1,22 +1,25 @@
-import matplotlib.path as mpath
-import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
-
 class Draw:
-    def __init__(self, width, height):
-        self.fig, self.ax = plt.subplots()
-        self.Path = mpath.Path
-        self.path_data = path_data = []
+    def __init__(self, our_svg, width, height):
+        self.our_svg = our_svg
         self.width = width
         self.height = height
+        self.write_start_svg()
+
+    def write_start_svg(self):
+        inicio = '<svg version="1.1" baseProfile="full" width="'+str(self.width)+'" height="'+str(self.height)+'" xmlns="http://www.w3.org/2000/svg">\n'
+        self.our_svg.write(inicio)
 
     def order_draw(self):
-        #plt.xlim((0, self.width))   # set the ylim to bottom, top
-        #plt.ylim(0, self.height)
-        plt.show()
+        self.our_svg.write('</svg>')
+        self.our_svg.close()
 
-    def draw_single_p(self, point, color_p):
-        plt.scatter(point[0], point[1], color=color_p, s=200)
+    def draw_single_p(self, point, color_p, tamanho):
+        inicio = '<circle cx="'+str(point[0])+'" cy="'+str(point[1])+'" r="'+str(tamanho)+'" stroke="'+str(color_p)+'" fill="'+str(color_p)+'" stroke-width="1"/>\n'
+        self.our_svg.write(inicio)
+
+    def draw__line(self, point1, point2, color_p, tamanho):
+        inicio = '<line x1="'+str(point1[0])+'" y1="'+str(point1[1])+'" x2="'+str(point2[0])+'" y2="'+str(point2[1])+'" style="stroke:'+str(color_p)+';stroke-width:'+str(tamanho)+'" />\n'
+        self.our_svg.write(inicio)
 
     def drawPoints(self, control_points, color_line, color_p, with_p):
         #send a matrix and draw it, basically we will be using this for the control points
@@ -28,15 +31,16 @@ class Draw:
                 x = [control_points[i][j][0], control_points[i][j+1][0]]
                 y = [control_points[i][j][1], control_points[i][j+1][1]]
                 if with_p:
-                    plt.scatter(x, y, color=color_p, s=100)#ploting the 1st point
-                plt.plot(x, y, color_line, linewidth=3)
+                    self.draw_single_p([x[0],y[0]], color_p, 6)#ploting the 1st point
+                    self.draw_single_p([x[1],y[1]], color_p, 6)#ploting the 2st point
+                self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 3)
                 
         for j in range(b):
             for i in range(a-1):
-                if with_p:
-                    x = [control_points[i][j][0], control_points[i+1][j][0]]
-                    y = [control_points[i][j][1], control_points[i+1][j][1]]
-                plt.plot(x, y, color_line, linewidth=3)
+                #b00 -> b10
+                x = [control_points[i][j][0], control_points[i+1][j][0]]
+                y = [control_points[i][j][1], control_points[i+1][j][1]]
+                self.draw__line([x[0],y[0]], [x[1],y[1]], color_line, 3)
 
     """def draw_bouding_box(self, bb, color_line, color_p):
         for i in range(len(bb)-1):

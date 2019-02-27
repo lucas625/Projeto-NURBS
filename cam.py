@@ -102,6 +102,6 @@ class Cam:
             points.append([])
             for j in range(len(control_points[i])):
                 aux = self.organize_single_point(control_points[i][j])
-                #aux = self.find_position_p(aux, width, height)
+                aux = self.find_position_p(aux, width, height)
                 points[i].append(aux)
         return points

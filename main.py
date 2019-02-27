@@ -4,7 +4,9 @@ import cam
 import nurbs
 import draw
 
-entrada = getJson('entrada.json')#get the input
+
+
+entrada = getJson('example.json')#get the input
 
 camIn = entrada['cam']
 pointsIn = entrada['control_points']
@@ -12,9 +14,11 @@ weightsIn = entrada['weights']
 knotsIn = entrada['knots']
 degreesIn = entrada['degrees']
 
-width = 1000
-height = 1000
-drawp = draw.Draw(width, height)#our class draw
+width = 500
+height = 500
+
+our_svg = open('answer.svg','r+')#our answer
+drawp = draw.Draw(our_svg, width, height)#our class draw
 
 nurbsVar = nurbs.Nurbs(#create the surface class
     degreesIn['Pdegree'], degreesIn['Qdegree'],
@@ -35,8 +39,10 @@ bb = nurbsVar.bounding_Box()#our bounding box
 
 
 
+
+
 def go_draw():
-    drawp.drawPoints(control_screen, 'go-', 'r', True)#control polygon
+    drawp.drawPoints(control_screen, 'green', 'yellow', True)#control polygon
     drawp.order_draw()
     
 def create_comands():
@@ -101,7 +107,7 @@ def checkIn(inp, commands):
     elif inp == '2':
         #here we will draw the surface
         point_Screen = nurbsVar.find_surface(workingCam, drawp.width, drawp.height)#now we have the points on screen
-        drawp.drawPoints(point_Screen, 'c-', '', False)
+        drawp.drawPoints(point_Screen, 'cyan', '', False)
 
     elif inp == '3':
         #here we will find a specific point on the surface
@@ -109,7 +115,7 @@ def checkIn(inp, commands):
         p = nurbsVar.nurbs_surface(inp[0],inp[1])
         p = workingCam.organize_single_point(p)
         p = workingCam.find_position_p(p,drawp.width,drawp.height)
-        drawp.draw_single_p(p,'k')
+        drawp.draw_single_p(p,'black', 8)
         print("The point is: ")
         print(p)
             #still need to draw

@@ -31,7 +31,7 @@ class Cam:
             'V': [],
             'N': []
         }
-        newBase['V'] = vectors.ortogonalize(N, V)
+        newBase['V'] = vectors.ortogonalize(V, N)
         newBase['U'] = vectors.crossProduct(N,newBase['V'])
         newBase['N'] = N
         newBase = self.normalizaBase(newBase)

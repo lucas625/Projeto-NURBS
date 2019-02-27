@@ -4,7 +4,7 @@ import cam
 import nurbs
 import draw
 
-entrada = getJson('entrada.json')#get the input
+entrada = getJson('example.json')#get the input
 
 camIn = entrada['cam']
 pointsIn = entrada['control_points']
@@ -97,6 +97,7 @@ def checkIn(inp, commands):
                 print("Sorry, invalid input.\nType the new number of iterations again, please.\nOr use 0 to cancel.")
                 new_iterations = input()
         nurbsVar.set_iterations(new_iterations)
+        nurbs_with_cam.set_iterations(new_iterations)
 
     elif inp == '2':
         #here we will draw the surface

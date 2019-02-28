@@ -29,14 +29,20 @@ nurbs_with_cam = nurbs.Nurbs(#create the surface class but with points already t
     len(pointsIn)-1, len(pointsIn[0])-1,
     pointsIn, knotsIn['P'], knotsIn['Q'], weightsIn
 )
-control_screen = workingCam.find_control_screen(nurbs_with_cam.control_points, drawp.width, drawp.height)
+#control_screen = workingCam.find_control_screen(nurbs_with_cam.control_points, drawp.width, drawp.height)
 
 bb = nurbsVar.bounding_Box()#our bounding box
 
 
-
 def go_draw():
-    drawp.drawPoints(control_screen, 'go-', 'r', True)#control polygon
+    p = []
+    for i in range(len(nurbsVar.control_points)):
+        p.append([])
+        for j in range(len(nurbsVar.control_points[i])):
+            aux = workingCam.organize_single_point(nurbsVar.control_points[i][j])
+            p[i].append(workingCam.find_position_p(aux,drawp.width,drawp.height))
+    print(p)
+    drawp.drawPoints(p, 'go-', 'r', True)#control polygon
     drawp.order_draw()
     
 def create_comands():
@@ -97,6 +103,7 @@ def checkIn(inp, commands):
                 print("Sorry, invalid input.\nType the new number of iterations again, please.\nOr use 0 to cancel.")
                 new_iterations = input()
         nurbsVar.set_iterations(new_iterations)
+        nurbs_with_cam.set_iterations(new_iterations)
 
     elif inp == '2':
         #here we will draw the surface
@@ -110,9 +117,7 @@ def checkIn(inp, commands):
         p = workingCam.organize_single_point(p)
         p = workingCam.find_position_p(p,drawp.width,drawp.height)
         drawp.draw_single_p(p,'k')
-        print("The point is: ")
-        print(p)
-            #still need to draw
+
 
     elif inp == '4':
         #here we will find a tangent
@@ -123,28 +128,24 @@ def checkIn(inp, commands):
 
     elif inp == '5':
         #here we will find the bounding box
-        print("the bounding box:")
-        print("1 - min x min y min z ", bb[0])
-        print("2 - min x min y max z ", bb[1])
-        print("3 - min x max y min z ", bb[2])
-        print("4 - min x max y max z ", bb[3])
-        print("5 - max x min y min z ", bb[4])
-        print("6 - max x min y max z ", bb[5])
-        print("7 - max x max y min z ", bb[6])
-        print("8 - max x max y max z ", bb[7])
-        print("bouding box lines:")
-        print(bb[0], '-', bb[1])
-        print(bb[0], '-', bb[2])
-        print(bb[0], '-', bb[4])
-        print(bb[1], '-', bb[3])
-        print(bb[1], '-', bb[5])
-        print(bb[2], '-', bb[3])
-        print(bb[2], '-', bb[6])
-        print(bb[3], '-', bb[7])
-        print(bb[4], '-', bb[5])
-        print(bb[4], '-', bb[6])
-        print(bb[5], '-', bb[7])
-        print(bb[6], '-', bb[7])
+        for i in range(len(bb)):
+            aux = workingCam.organize_single_point(bb[i])
+            bb[i] = workingCam.find_position_p(aux,drawp.width,drawp.height)
+            drawp.draw_single_p(bb[i], 'y')
+
+        drawp.draw_line(bb[0], bb[1], 'y-')
+        drawp.draw_line(bb[0], bb[2], 'y-')
+        drawp.draw_line(bb[0], bb[4], 'y-')
+        drawp.draw_line(bb[1], bb[3], 'y-')
+        drawp.draw_line(bb[1], bb[5], 'y-')
+        drawp.draw_line(bb[2], bb[3], 'y-')
+        drawp.draw_line(bb[2], bb[6], 'y-')
+        drawp.draw_line(bb[3], bb[7], 'y-')
+        drawp.draw_line(bb[4], bb[5], 'y-')
+        drawp.draw_line(bb[4], bb[6], 'y-')
+        drawp.draw_line(bb[5], bb[7], 'y-')
+        drawp.draw_line(bb[6], bb[7], 'y-')
+        
 
     elif inp == '6':
         go_draw()

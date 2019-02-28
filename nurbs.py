@@ -149,7 +149,7 @@ class Nurbs:
                 print(p1)
                 #we have the points, now we need to find the projection since they are already transformed them
                 p1 = camera.organize_single_point(p1)
-                #p1 = camera.find_position_p(p1,width,height)
+                p1 = camera.find_position_p(p1,width,height)
                 plots[i].append(p1)
         return plots
                 

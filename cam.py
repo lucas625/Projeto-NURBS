@@ -24,25 +24,23 @@ class Cam:
             baseAux[i] = aux
         return baseAux
 
-    def organizeVectors(self, N, V, translation):
+    def organizeVectors(self, N, V):
         # set the vectors of the camera to the desired model
         newBase = {
             'U': [],
             'V': [],
             'N': []
         }
-        newBase['V'] = vectors.ortogonalize(N, V)
+        newBase['V'] = vectors.ortogonalize(V, N)
         newBase['U'] = vectors.crossProduct(N,newBase['V'])
         newBase['N'] = N
         newBase = self.normalizaBase(newBase)
         BaseCam = []
-        newBase['U'].append(translation[0])
-        newBase['V'].append(translation[1])
-        newBase['N'].append(translation[2])
+        
         BaseCam.append(newBase['U'])
         BaseCam.append(newBase['V'])
         BaseCam.append(newBase['N'])
-        BaseCam.append([0,0,0,1])
+        
         return BaseCam
 
     def organizeCam(self, cam):
@@ -51,10 +49,16 @@ class Cam:
         if(len(cam['N'])==0 or len(cam['V'])==0):
             raise('please use non empty cam vectors')
         translation = vectors.constantMult(cam['C'],-1)
-        camAux = self.organizeVectors(cam['N'], cam['V'], translation)
+        camAux = self.organizeVectors(cam['N'], cam['V'])
         camAux = np.array(camAux)
         camAux = camAux.T
         camAux = camAux.tolist()
+        
+        camAux[0].append(translation[0])
+        camAux[1].append(translation[1])
+        camAux[2].append(translation[2])
+        camAux.append([0,0,0,1])
+        
         return camAux
 
     def organize_single_point(self, point):
@@ -79,19 +83,20 @@ class Cam:
 
     def find_position_p(self, point, width, height):
         #find point position on screen given width and height
-        a=(-1)*point[2]
+        a=point[2]
         if point[2] == 0:
-            a = -1
-        a = a*self.d
-        x1 = (point[0]) / a #x1 = x*d / z
-        y1 = (point[1]) / a #y1 = y*d / z
-        pNDCX = (x1 + self.hx) / (2 * self.hx)
-        pNDCY = (y1 + self.hy) / (2*self.hy)
-        newX = (pNDCX * width)
-        newY = ((1-pNDCY) * height)
-        #since we are using math plot lib ins#tead of drawing by ourselves, we do not need to care about the screen height or width
-        pixelX = int(newX // 1)
-        pixelY = int(newY // 1)
+            a =1
+        x1 = (self.d *  point[0]) / a #x1 = x*d / z
+        y1 = (self.d * point[1]) / a #y1 = y*d / z
+        newX = ( x1 / (self.hx*2) ) - 0.5 
+        newY = ( y1 / (self.hy*2)) -0.5#in the case of pixel y increasing to bottom
+        #since we are using math plot lib instead of drawing by ourselves, we do not need to care about the screen height or width
+        pixelX = newX
+        pixelY = newY
+        pixelX = pixelX * width
+        pixelY = pixelY * height
+        pixelX = int(pixelX // 1)
+        pixelY = int(pixelY // 1)
         #we are using floor just to make sure that the newX and newY division wont place them between a non integer
         position = [pixelX, pixelY]
         return position

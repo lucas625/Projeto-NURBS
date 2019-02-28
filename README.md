@@ -45,7 +45,7 @@ Developed using python 3.7.
 
     If you run example.json (just change main line 7), the output will be a graph like example.PNG
 
-    Notice that our surface is blue, our wireframe green, our specific dot black and our bounding box yellow.
+    Notice that our surface is blue, our control points red with green lines, our specific point black and our bounding box yellow.
 
 7. Testing.
     ```

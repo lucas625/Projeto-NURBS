@@ -18,6 +18,11 @@ class Draw:
     def draw_single_p(self, point, color_p):
         plt.scatter(point[0], point[1], color=color_p, s=200)
 
+    def draw_line(self, point1, point2, color_line):
+        x = [point1[0], point2[0]]
+        y = [point1[1], point2[1]]
+        plt.plot(x, y, color_line, linewidth=3)
+
     def drawPoints(self, control_points, color_line, color_p, with_p):
         #send a matrix and draw it, basically we will be using this for the control points
         a = len(control_points)

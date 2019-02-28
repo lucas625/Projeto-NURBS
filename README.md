@@ -41,6 +41,12 @@ Developed using python 3.7.
 
     Once you run the test, if you load the curve it will take a bit after all the points are calculated because matplotlib is a bit slow on this case.
 
+    Currently our **derivative** IS NOT working.
+
+    If you run example.json (just change main line 7), the output will be a graph like example.PNG
+
+    Notice that our surface is blue, our wireframe green, our specific dot black and our bounding box yellow.
+
 7. Testing.
     ```
     Use python3 main.py
